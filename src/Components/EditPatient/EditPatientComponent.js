@@ -10,13 +10,69 @@ const EditPatientsComponent = () =>{
     const [Mobile,setMobile] = useState('')
     const [Email,setEmail] = useState('')
 
-    const HandleSubmit = (e) =>{
+    const patientIDValidator = () => {
+        if (ID.length !== 0)
+        {
+            fetch('http://localhost:3600/api/v1/patients/validate',{
+                method:'POST',
+                crossDomain: true,
+                headers: {
+                    'Content-type':'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({
+                    patientID : ID,
+                })
+            })
+            .then((response) => response.json())
+            .then((data) => 
+            {
+                setName(data.patientName),
+                setAge(data.patientAge),
+                setGender(data.patientGender),
+                setCity(data.patientCity),
+                setMobile(data.patientMobile),
+                setEmail(data.patientEmail)
+            }
+        )
+        }
+    }
+
+    const formSubmitHandler = (e) =>{
         e.preventDefault()
-        
+
+        fetch('http://localhost:3500/api/v1/patients',{
+        method:'PATCH',
+        crossDomain: true,
+        headers: {
+            'Content-type':'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({
+            patientName : Name,
+            patientID : ID ,
+            patientAge: Age ,
+            patientGender: Gender,
+            patientCity: City ,
+            patientMobile: Mobile ,
+            patientEmail : Email
+        })
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message)
+            {
+                alert(data.message)
+            }
+            else{
+                alert(`Data is updated successfully`)
+                window.location.href = '/'
+            }
+        })
     }
 
     return(
-        <form className='form-container'>
+        <form className='form-container' onSubmit={formSubmitHandler}>
             <h2>Update Details</h2>
             <div className='form-group'>
                 <label>Patient ID</label>
@@ -29,7 +85,7 @@ const EditPatientsComponent = () =>{
                 />
             </div>
             <div>
-                <button>Check</button>
+                <button onClick={patientIDValidator}>Check</button>
             </div>
             <div className='form-group'>
                 <label>Patient Name</label>
