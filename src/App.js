@@ -1,12 +1,26 @@
 import './App.css';
-import GetAllPatient from './Components/GetAllPatients/GetAllPatientComponent'
-import EditPatient from './Components/EditPatient/EditPatientComponent'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import GetAllPatientsComponent from './Components/GetAllPatients/GetAllPatientComponent';
+import AddNewPatientsComponent from './Components/AddNewPatient/AddNewPatient';
+import EditPatientsComponent from './Components/EditPatient/EditPatientComponent';
 
 function App() {
   return (
-    <div className="App">
-      <EditPatient />
-    </div>
+      <Router>
+            <div className="container">
+              <h1>Hospital App</h1>
+              <nav className="nav-menu">
+                  <Link to="/" >Home</Link>
+                  <Link to="/admin/add" >Add Patients</Link>
+                  <Link to="/admin/edit" >Edit Patients</Link>
+              </nav>
+              <Routes>
+                  <Route exact path='/' element={<GetAllPatientsComponent/>}></Route>
+                  <Route path='/admin/add' element={<AddNewPatientsComponent/>}></Route>
+                  <Route path='/admin/edit' element={<EditPatientsComponent/>}></Route>
+              </Routes>
+            </div>
+      </Router>
   );
 }
 
